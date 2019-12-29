@@ -1,16 +1,19 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{examS2M}[06/03/2019]
+\ProvidesPackage{examS2M}[27/12/2019]
 
 % Package écrit par Pariterre pour le laboratoire S2M
 % Version 1 - 18/04/2016
 %	Première version, les questions vrais ou faux, à choix multiple, à développement et custom pour les deux derniers sont possibles
 % Version 1.1 - 04/09/2016
 %	Ajout de la possibilité de mettre des réponses pour les questions custom et gestion légère d'un layout
+% Version 1.2 - 27/12-2019
+%   Les bonnes réponses sont maintenant toutes labellées bonneReponse
 
 % Tous ces packages sont nécessaires
+\RequirePackage[T1]{fontenc}
 \RequirePackage[utf8]{inputenc}
 \RequirePackage{xparse}
-\RequirePackage{soul,color}
+\RequirePackage{soulutf8,color}
 \RequirePackage{tabularx}
 \RequirePackage{amssymb}
 \RequirePackage{etoolbox}
@@ -27,10 +30,10 @@
 %%%%% OPTIONS %%%%%
 % Dessiner la bonne réponse 
 \newcommand{\hlAnswer}{}
-\newcommand\cacherReponse[1]{}
+\newcommand\bonneReponse[1]{}
 \DeclareOption{corrige}{
   \let\hlAnswer\hl
-  \renewcommand\cacherReponse[1]{\hlAnswer{R\'eponse:} #1}
+  \renewcommand\bonneReponse[1]{\hlAnswer{Réponse:} #1}
 }
 
 \ProcessOptions
@@ -96,7 +99,7 @@
   }
   
   
-\newcommand\makeEntete{
+\newcommand\entete{
   % Département et université
   \begin{table}
     \hspace{-15px}
@@ -168,7 +171,7 @@
   \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
   \newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
   % Dessiner une ligne, l'argument 1 est le nombre de points
-  \newcommand\makeVraiOuFauxSection[1]{
+  \newcommand\enteteSectionVraiOuFaux[1]{
   
     \vspace{15px}
     \rule{.5\linewidth}{2px} \\
@@ -200,7 +203,7 @@
   \newtotcounter{NombreChoixMultiples}
   
   % Dessiner une ligne, l'argument 1 est le nombre de points
-  \newcommand\makeChoixMultiplesSection[1]{
+  \newcommand\enteteSectionChoixMultiples[1]{
   
     \vspace{15px}
     \rule{.5\linewidth}{2px} \\
@@ -213,7 +216,7 @@
   % Définition de l'environnement. L'argument 1 est la question
   \NewDocumentEnvironment{choixMultiples}{m}{
     \let\reponse\item
-    \newcommand\bonneReponse{
+    \renewcommand\bonneReponse{
         \addtocounter{enumii}{1}
         \item[\hlAnswer{(\theenumii)}]
     } 
@@ -245,7 +248,7 @@
 %%%%% QUESTION À DÉVELOPPEMENT %%%%%
   \newtotcounter{NombreDeveloppement}
   
-  \newcommand\makeDeveloppementSection{
+  \newcommand\enteteSectionDeveloppement{
   
   \vspace{15px}
     \rule{.5\linewidth}{2px} \\
